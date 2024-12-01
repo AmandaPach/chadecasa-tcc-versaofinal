@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: #E0E0E0; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+  <div class="container">
+      <a class="navbar-brand" href="#" style="font-weight: bold; color: #06412D;">Chá de Casa</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Usuário
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url "cliente:list" %}">Cliente</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url "funcionario:list" %}">Funcionário</a></li>
+                      <li><a class="dropdown-item" href="{% url "funcionario:cargo-list" %}">Cargo</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url "local:pais-list" %}">País</a></li>
+                      <li><a class="dropdown-item" href="{% url "local:estado-list" %}">Estado</a></li>
+                      <li><a class="dropdown-item" href="{% url "local:cidade-list" %}">Cidade</a></li>
+                  </ul>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Financeiro
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url "fornecedor:list" %}">Fornecedor</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url "pagamento:list" %}">Forma de Pagamento</a></li>
+                      <li><a class="dropdown-item" href="{% url "pagamento:condicao-list" %}">Condição de Pagamento</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url "compras:list" %}">Compra</a></li>
+                      <li><a class="dropdown-item" href="{% url "vendas:list" %}">Venda</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url "pagamento:modelo-list" %}">Modelos de nota</a></li>
+                  </ul>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Produto
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url "produtos:list" %}">Produtos</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{% url "produtos:categoria-list" %}">Categoria</a></li>
+                      <li><a class="dropdown-item" href="{% url "produtos:tipo-produto-list" %}">Tipo</a></li>        
+                  </ul>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>

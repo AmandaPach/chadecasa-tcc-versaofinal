@@ -1,0 +1,149 @@
+<div class="modal fade" id="modal-vendas" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar nova venda</h3>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="valor_total" value="0" id="valor_total" />
+          <div class="fields row pb-3">
+            <div class="field col-12">
+              <label>Cliente</label>
+              <select
+                name="cliente_id"
+                id="cliente_id"
+                required
+                class="form-select itens-venda"
+              >
+                <option value="new">Novo Cliente</option>
+                <option value="" selected>Selecione um cliente</option>
+                {% for cliente in clientes %}
+                  <option value="{{ cliente.id }}">
+                    {{ cliente.nome_cliente }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div id="formset-items-produtos">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Valor Unit.</th>
+                  <th>Desconto</th>
+                  <th>Total</th>
+                  <th>Remover</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="mb-3 px-2 d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Total dos produtos: R$ <span id="total_produtos">0.00</span></h5>
+            <div class="buttons">
+              <button onclick="mudarSecaoProdutos()" id="return-produtos" type="button" class="btn btn-danger">
+                Voltar
+              </button>
+              <button type="button" class="btn btn-primary itens-venda" id="save-products" onclick="salvarSecaoProdutos()">
+                Salvar Produtos
+              </button>
+            </div>
+          </div>
+
+          <h4 class="mt-4">Pagamento</h4>
+          <div class="row pb-3">
+            <div class="field col-4">
+              <label for="frete">Frete</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="frete" id="frete">
+            </div>
+            <div class="field col-4">
+              <label for="seguro">Seguro</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="seguro" id="seguro">
+            </div>
+            <div class="field col-4">
+              <label for="outras_despesas">Outras Despesas</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="outras_despesas" id="outras_despesas">
+            </div>
+            <div class="field col-12">
+              <label for="condicao_pagamento_id">Condição de Pagamento</label>
+              <select id="condicao_pagamento_id" name="condicao_pagamento_id" class="form-select itens-pagamento">
+                <option value="new">Nova Condição de Pagamento</option>
+                <option value="" selected>Selecione uma condição de pagamento</option>
+                {% for condicao in condicoes %}
+                  <option value="{{ condicao.id }}">{{ condicao.nome_condicao_pgto }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="parcelas">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Parcela</th>
+                  <th>Dias</th>
+                  <th>Percentual</th>
+                  <th>Desconto</th>
+                  <th>Taxa</th>
+                  <th>Multa</th>
+                  <th>Forma de pagamento</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <hr>
+          <div class="mb-3 px-2 d-flex align-items-center">
+            <h3 class="m-0">Total: R$ <span id="total">0.00</span></h3>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button onclick="fecharModalVendas()" type="button" class="btn btn-secondary">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" onclick="salvarVendas()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="empty-form-produto">
+  <td>
+    <button type="button" class="btn btn-primary" class="add-item itens-venda" onclick="addProdutoInput()"><b>+</b></button>
+  </td>
+  <td>
+    <select
+      class="form-select itens-venda"
+      name="produto_id"
+      onchange="verifyProduto(this)"
+      required
+    >
+    </select>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="number" class="form-control itens-venda" value="1" name="quantidade"/>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="text" readonly class="custo form-control" step=".01" name="custo" data-type="money" value="R$ 0.00"/>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="number" class="form-control itens-venda" step=".01" name="desconto" data-type="money" value="0.00"/>
+  </td>
+  <td>
+    <input type="number" readonly class="form-control itens-venda" name="unidadeCusto" data-type="money" value="0.00"/>
+  </td>
+  <td align="center">
+    <button type="button" class="btn btn-danger itens-venda" onclick="removeItem(this);">
+      <b>X</b>
+    </button>
+  </td>
+</script>

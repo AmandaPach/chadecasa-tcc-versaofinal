@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %} Tipos {% endblock page_title %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Tipos</h1>
+  <button onclick="abrirModal('#modal-tipo-produto')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+  {% if tipos_produtos %}
+    <table class="table table-hover">
+      <thead>
+        <tr class="table-light">
+          <th scope="col">#</th>
+          <th scope="col">Status</th>
+          <th scope="col">Tipos</th>
+          <th scope="col">Data de Cadastro</th>
+          <th scope="col">Última alteração</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tipo in tipos_produtos %}
+        <tr>
+          <th scope="row">{{tipo.id}}</th>
+          <td>{% status is_active=tipo.status %}</td>
+          <td>{{tipo.nome_tipo}}</td>
+          <td>{{tipo.data_cadastro|format_date}}</td>
+          <td>{{tipo.data_ultima_alteracao|format_date}}</td>
+          <td>
+            <a href="javascript:editarTipoProduto('{{tipo.id}}')" class="btn btn-sm btn-warning"
+              >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+            >
+            <a
+              href="javascript:deleteTipoProduto('{{tipo.id}}')"
+              class="btn btn-sm btn-danger"
+              >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Sem dados cadastrados</p>
+  {% endif %}
+
+  {% include "produtos/tipo_produto_modal.html" with on_save="salvarTipoProduto()" on_cancel="fecharModal('#modal-tipo-produto')" %}
+
+  <script src="{% static 'js/produtos/tipoProduto.js' %}"></script>
+  
+{% endblock content %}

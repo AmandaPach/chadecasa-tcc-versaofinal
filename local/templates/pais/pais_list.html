@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% load static format_date %}
+
+{% block page_title %}Países{%endblock page_title %}
+
+{% block content %}
+
+
+<div class="justify-content-between d-flex mb-4">
+  <h1>Lista de Países</h1>
+  <button class="btn btn-primary" onclick="abrirModal('#modal-pais')">
+    Novo Cadastro
+  </button>
+</div>
+
+{% if paises %}
+  <table class="table table-hover">
+    <thead>
+      <tr class="table-light">
+        <th scope="col">Cod</th>
+        <th scope="col">País</th>
+        <th scope="col">Sigla</th>
+        <th scope="col">Data de Cadastro</th>
+        <th scope="col">Última alteração</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pais in paises %}
+      <tr>
+        <th scope="row">{{pais.id}}</th>
+        <td>{{pais.nome_pais}}</td>
+        <td>{{pais.sigla_pais | default:"-"}}</td>
+        <td>{{pais.data_cadastro|format_date}}</td>
+        <td>{{pais.data_ultima_alteracao|format_date}}</td>
+        <td>
+          <a href="javascript:editarPais('{{pais.id}}')" class="btn btn-sm btn-warning">
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a>
+          <a
+            href="javascript:deletePais('{{pais.id}}')"
+            class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>Sem dados cadastrados</p>
+{% endif %}
+
+{% include 'pais/pais_modal.html' with on_save="salvarPais()" on_cancel="fecharModal('#modal-pais')" %}
+
+<script src="{% static 'js/local/pais.js' %}"></script>
+
+{% endblock content %}

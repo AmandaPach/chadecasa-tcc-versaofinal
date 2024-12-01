@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load static format_date %}
+
+{% block page_title %}Vendas{% endblock page_title %}
+
+{% block content %}
+
+<div class="justify-content-between d-flex mb-4">
+  <h1>Lista de Vendas</h1>
+  <button class="btn btn-primary" onclick="abrirModalVendas()">
+    Novo Cadastro
+  </button>
+</div>
+
+{% if vendas %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">Nota Fiscal</th>
+      <th scope="col">Modelo da Nota</th>
+      <th scope="col">Série da Nota</th>
+      <th scope="col">Cliente</th>
+      <th scope="col">Cond. de Pagamento</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Valor total</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for venda in vendas %}
+      <tr {% if venda.cancelado %}cancelled{% endif %}>
+        <td>{{venda.nota_fiscal}}</td>
+        <td>{{venda.modelo_nota}}</td>
+        <td>{{venda.serie}}</td>
+        <td>{{venda.cliente_nome}}</td>
+        <td>{{venda.condicao_pagamento|default:"R$ 0"}}</td>
+        <td>{{venda.data_cadastro|default:"R$ 0"}}</td>
+        <td>R$ {{venda.valor_total}}</td>
+        <td>
+          <button type="button" {% if venda.cancelado %}disabled{% endif %} onclick="cancelarVenda('{{venda.nota_fiscal}}', '{{venda.modelo_nota}}', '{{venda.serie}}', '{{venda.cliente_id}}')" class="btn btn-sm btn-danger">
+            <img class='icon' src="{% static 'img/icons/xmark.svg' %}" alt="Excluir" />
+          </button>
+          <button class="btn btn-sm btn-primary" onclick="verVendas('{{venda.nota_fiscal}}', '{{venda.modelo_nota}}', '{{venda.serie}}', '{{venda.cliente_id}}')">
+            <img src="{% static 'img/icons/eye.svg' %}" alt="Ver venda" class="icon">
+          </button>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p>Sem vendas registradas</p>
+{% endif %}
+
+{% include 'vendas/venda_modal.html' %}
+{% include 'produtos/produto_modal.html' with on_save="salvarProduto()" on_cancel="abrirModal('#modal-vendas')" %}
+{% include 'cliente/cliente_modal.html' with on_save="salvarCliente()" on_cancel="abrirModal('#modal-vendas')" %}
+{% include 'pagamento/condicao_pagamento_modal.html' with on_save="salvarCondicao()" on_cancel="abrirModal('#modal-vendas')" %}
+{% include 'pagamento/forma_pagamento_modal.html' with on_save="salvarPagamento()" on_cancel="abrirModal('#modal-condicao')" %}
+{% include 'cidade/cidade_modal.html' with on_save="salvarCidade()" on_cancel="abrirModal('#modal-cliente')" %}
+{% include 'pagamento/modelo_modal.html' with on_save="salvarModelo()" on_cancel="abrirModal('#modal-vendas')" %}
+
+<script src="{% static 'js/vendas/vendas.js' %}"></script>
+<script src="{% static 'js/vendas/vendas_modal.js' %}"></script>
+
+{% endblock %}

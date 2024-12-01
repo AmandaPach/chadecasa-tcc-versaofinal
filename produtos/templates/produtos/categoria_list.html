@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %} Categorias {% endblock page_title %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Categorias</h1>
+  <button onclick="abrirModal('#modal-categoria')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+{% if categorias %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">#</th>
+      <th scope="col">Status</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Última alteração</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for categoria in categorias %}
+    <tr>
+      <td scope="row">{{categoria.id}}</td>
+      <td>{% status is_active=categoria.status %}</td>
+      <td>{{categoria.nome_categoria}}</td>
+      <td>{{categoria.data_cadastro|format_date}}</td>
+      <td>{{categoria.data_ultima_alteracao|format_date}}</td>
+      <td>
+        <a href="javascript:editarCategoria('{{categoria.id}}')" class="btn btn-sm btn-warning"
+          >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+        >
+        <a
+          href="javascript:deleteCategoria('{{categoria.id}}')"
+          class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Sem dados cadastrados</p>
+{% endif %}
+
+{% include "produtos/categoria_modal.html" with on_save="salvarCategoria()" on_cancel="fecharModal('#modal-categoria')" %}
+
+<script src="{% static 'js/produtos/categoria.js' %}"></script>
+
+{% endblock content %}

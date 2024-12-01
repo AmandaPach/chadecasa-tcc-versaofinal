@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% load static format_date %}
+
+{% block page_title %}Estados{% endblock page_title %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Estados</h1>
+  <button onclick="abrirModal('#modal-estado')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+{% if estados %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">#</th>
+      <th scope="col">Estado</th>
+      <th scope="col">UF</th>
+      <th scope="col">País</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Última alteração</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for estado in estados %}
+    <tr>
+      <th scope="row">{{estado.id}}</th>
+      <td>{{estado.nome_estado}}</td>
+      <td>{{estado.sigla_estado | default:"-"}}</td>
+      <td>{{estado.pais}}</td>
+      <td>{{estado.data_cadastro|format_date}}</td>
+      <td>{{estado.data_ultima_alteracao|format_date}}</td>
+      <td>
+        <a href="javascript:editarEstado('{{estado.id}}')" class="btn btn-sm btn-warning"
+          >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+        >
+        <a
+          href="javascript:deleteEstado('{{estado.id}}')"
+          class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Sem dados cadastrados</p>
+{% endif %}
+
+
+
+{% include 'estado/estado_modal.html' with on_save="salvarEstado()" on_cancel="abrirModal('#modal-estado')" %}
+{% include 'pais/pais_modal.html' with on_save="salvarPais()" on_cancel="abrirModal('#modal-estado')" %}
+
+<script src="{% static 'js/local/estado.js' %}"></script>
+
+{% endblock content %}

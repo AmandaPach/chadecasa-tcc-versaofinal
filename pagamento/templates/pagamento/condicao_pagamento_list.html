@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %}
+    Condição Pagamento
+{% endblock page_title %}
+
+{% block content %}
+<div class="justify-content-between d-flex mb-4">
+    <h1>Lista de Condições Pagamento</h1>
+    <button onclick="abrirModal('#modal-condicao')" class="btn btn-primary">Novo cadastro</button>
+</div>
+
+    {% if condicoes %}
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">#</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Data de Cadastro</th>
+                    <th scope="col">Última alteração</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Ações</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for condicao in condicoes %}
+                    <tr>
+                        <td scope="row">{{condicao.id}}</td>
+                        <td>{% status is_active=condicao.status %}</td>
+                        <td>{{condicao.nome_condicao_pgto}}</td>
+                        <td>{{condicao.data_cadastro|format_date}}</td>
+                        <td>{{condicao.data_ultima_alteracao|format_date}}</td>
+                        <td>{{condicao.status}}</td>
+                        <td>
+                            <a href="javascript:editarCondicao('{{condicao.id}}')" class="btn btn-sm btn-warning">
+                                <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+                            </a>
+                            <a href="javascript:deleteCondicao('{{condicao.id}}')" class="btn btn-sm btn-danger">
+                                <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:abrirModalParcelas('{{condicao.id}}')" class="btn btn-sm btn-primary">Ver Parcelas</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p> Sem dados cadastrados </p>
+    {% endif %}
+     
+    
+    {% include 'pagamento/condicao_pagamento_modal.html' with on_save="salvarCondicao()" on_cancel="fecharModal('#modal-condicao')" %}
+    {% include 'pagamento/forma_pagamento_modal.html' with on_save="salvarPagamento()" on_cancel="abrirModal('#modal-condicao')" %}
+    {% include 'pagamento/condicao_pagamento_parcelas_modal.html' %}
+
+    <script src="{% static 'js/pagamento/condicao_pagamento.js' %}"></script>
+
+{% endblock content %}

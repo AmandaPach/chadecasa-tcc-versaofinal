@@ -1,0 +1,191 @@
+<div class="modal fade" id="modal-cliente" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar novo cliente</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="field col-12 border rounded text-center py-2 edit-field">
+            <input type="checkbox" name="status" class="form-check-input" id="status" checked="true"/>
+            <label class="form-check-label" for="status">Ativo</label>
+          </div>
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-6">
+              <label for="nome_cliente">Nome</label>
+              <input
+                maxlength="40"
+                id="nome_cliente"
+                type="text"
+                name="nome_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="sobrenome_cliente">Sobrenome</label>
+              <input
+                maxlength="100"
+                id="sobrenome_cliente"
+                type="text"
+                name="sobrenome_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="sexo_cliente">Sexo</label>
+              <select
+                id="sexo_cliente"
+                name="sexo_cliente"
+                class="form-control"
+                required
+              >
+                <option value="" selected>Selecione o sexo</option>
+                <option value="male">Masculino</option>
+                <option value="female">Feminino</option>
+                <option value="other">Outro</option>
+              </select>
+            </div>
+            <div class="field col-6">
+              <label for="data_nascimento_cliente">Data de nascimento</label>
+              <input
+                id="data_nascimento_cliente"
+                type="date"
+                data-type="pastdate"
+                name="data_nascimento_cliente"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="cep_cliente">CEP</label>
+              <input
+                id="cep_cliente"
+                maxlength="10"
+                type="number"
+                data-type="cep"
+                name="cep_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="rua_cliente">Rua</label>
+              <input
+                id="rua_cliente"
+                maxlength="100"
+                type="text"
+                name="rua_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="numero_rua_cliente">Número</label>
+              <input
+                id="numero_rua_cliente"
+                min="0"
+                maxlength="10"
+                type="text"
+                name="numero_rua_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="bairro_cliente">Bairro</label>
+              <input
+                id="bairro_cliente"
+                type="text"
+                name="bairro_cliente"
+                maxlength="40"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-12">
+              <label for="complemento_cliente">Complemento</label>
+              <input
+                id="complemento_cliente"
+                maxlength="100"
+                type="text"
+                name="complemento_cliente"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="cidade_id">Cidade</label>
+              <select id="cidade_id" name="cidade_id" class="form-control" required>
+                <option value="new">Adicionar cidade</option>
+                <option value="" selected>Selecione uma cidade</option>
+                {% for cidade in cidades %}
+                  <option value="{{cidade.id}}">{{cidade.nome_cidade}}</option>
+                {%endfor%}
+              </select>
+            </div>
+            <div class="field col-6">
+              <label for="telefone_cliente">Telefone</label>
+              <input
+                id="telefone_cliente"
+                type="phone"
+                data-type="phone"
+                name="telefone_cliente"
+                class="form-control"
+                required
+              />
+            </div>
+            
+            <div class="field col-6">
+              <label for="cpf_cliente">CPF</label>
+              <input
+                id="cpf_cliente"
+                data-type="cpf"
+                type="text"
+                name="cpf_cliente"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="rg_cliente">RG</label>
+              <input
+                id="rg_cliente"
+                data-type="rg"
+                type="number"
+                name="rg_cliente"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-danger edit-field" onclick="limparCliente()">
+          Limpar dados
+        </button>
+        <div></div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" onclick="{{ on_cancel }}">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

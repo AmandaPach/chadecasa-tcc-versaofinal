@@ -1,0 +1,193 @@
+<div class="modal fade" id="modal-fornecedor" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar novo fornecedor</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fields row pb-3">
+            <div class="field col-12 border rounded text-center py-2 edit-field">
+              <input type="checkbox" name="status" class="form-check-input" id="status" checked="true"/>
+              <label class="form-check-label" for="status">Ativo</label>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-6">
+              <label for="razao_social_fornecedor">Razão Social</label>
+              <input
+                id="razao_social_fornecedor"
+                type="text"
+                name="razao_social_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="nome_fantasia_fornecedor">Nome Fantasia</label>
+              <input
+                id="nome_fantasia_fornecedor"
+                type="text"
+                name="nome_fantasia_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="cnpj_fornecedor">CNPJ</label>
+              <input
+                id="cnpj_fornecedor"
+                type="text"
+                name="cnpj_fornecedor"
+                data-type="cnpj"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="ie_fornecedor">Inscrição Estadual - IE</label>
+              <input
+                min="0"
+                minlength="8"
+                id="ie_fornecedor"
+                data-type="rg"
+                type="number"
+                name="ie_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="email_fornecedor">Email</label>
+              <input
+                id="email_fornecedor"
+                type="email"
+                name="email_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="data_fundacao_fornecedor">Data da fundação</label>
+              <input
+                id="data_fundacao_fornecedor"
+                type="date"
+                data-type="pastdate"
+                name="data_fundacao_fornecedor"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="telefone_fornecedor">Telefone</label>
+              <input
+                id="telefone_fornecedor"
+                type="text"
+                data-type="phone"
+                name="telefone_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="limite_credito_fornecedor">Limite de crédito</label>
+              <input
+                id="limite_credito_fornecedor"
+                type="number"
+                min="0"
+                step=".01"
+                data-type="money"
+                name="limite_credito_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="rua_fornecedor">Rua</label>
+              <input
+                id="rua_fornecedor"
+                type="text"
+                name="rua_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="bairro_fornecedor">Bairro</label>
+              <input
+                id="bairro_fornecedor"
+                type="text"
+                name="bairro_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-4">
+              <label for="cep_fornecedor">CEP</label>
+              <input
+              id="cep_fornecedor"
+                data-type="cep"
+                type="text"
+                name="cep_fornecedor"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-4">
+              <label for="numero_rua_fornecedor">Número</label>
+              <input
+                id="numero_rua_fornecedor"
+                type="text"
+                min="0"
+                name="numero_rua_fornecedor"
+                class="form-control"
+                required
+                />
+            </div>
+            <div class="field col-4">
+              <label for="cidade_id">Cidade</label>
+              <select id="cidade_id" name="cidade_id" class="form-select" required>
+                <option value="new">Nova Cidade</option>
+                <option value="" selected>Selecione um estado primeiro</option>
+                {% for cidade in cidades %}
+                  <option value="{{ cidade.id }}">{{ cidade.nome_cidade }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field col-12">
+              <label for="complemento_fornecedor">Complemento</label>
+              <input
+                id="complemento_fornecedor"
+                type="text"
+                name="complemento_fornecedor"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div></div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" onclick="{{ on_cancel }}">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static format_date %}
+
+{% block page_title %} Cidades {% endblock page_title%}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Cidades</h1>
+  <button onclick="abrirModal('#modal-cidade')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+{% if cidades %}
+  <table class="table table-hover">
+    <thead>
+      <tr class="table-light">
+        <th scope="col">#</th>
+        <th scope="col">Cidade</th>
+        <th scope="col">DDD</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Data de Cadastro</th>
+        <th scope="col">Última alteração</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cidade in cidades %}
+      <tr>
+        <th scope="row">{{cidade.id}}</th>
+        <td>{{cidade.nome_cidade}}</td>
+        <td>{{cidade.ddd_cidade | default:"-"}}</td>
+        <td>{{cidade.estado}}</td>
+        <td>{{cidade.data_cadastro|format_date}}</td>
+        <td>{{cidade.data_ultima_alteracao|format_date}}</td>
+        <td>
+          <a href="javascript:editarCidade('{{cidade.id}}')" class="btn btn-sm btn-warning"
+            >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+          >
+          <a
+            href="javascript:deleteCidade('{{cidade.id}}')"
+            class="btn btn-sm btn-danger"
+            >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>Sem dados cadastrados</p>
+{% endif %}
+
+
+
+{% include 'cidade/cidade_modal.html' with on_save="salvarCidade()" on_cancel="fecharModal('#modal-cidade')" %}
+
+<script src="{% static 'js/local/cidade.js' %}"></script>
+
+{% endblock content %}

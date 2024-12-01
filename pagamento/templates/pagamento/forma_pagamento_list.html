@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %}
+    Forma Pagamento
+{% endblock page_title %}
+
+{% block content %}
+<div class="justify-content-between d-flex mb-4">
+    <h1>Lista de Formas de Pagamento</h1>
+    <button onclick="abrirModal('#modal-pagamento')" class="btn btn-primary">Novo cadastro</button>
+</div>
+
+    {% if pagamentos %}
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">#</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Data de Cadastro</th>
+                    <th scope="col">Última alteração</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pagamento in pagamentos %}
+                    <tr>
+                        <td scope="row">{{pagamento.id}}</td>
+                        <td>{% status is_active=pagamento.status %}</td>
+                        <td>{{pagamento.nome_pagamento}}</td>
+                        <td>{{pagamento.descricao_pagamento}}</td>
+                        <td>{{pagamento.data_cadastro|format_date}}</td>
+                        <td>{{pagamento.data_ultima_alteracao|format_date}}</td>
+                        <td>
+                            <a href="javascript:editarPagamento('{{pagamento.id}}')" class="btn btn-sm btn-warning">
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a>
+                            <a href="javascript:deletePagamento('{{pagamento.id}}')" class="btn btn-sm btn-danger">
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p> Sem dados cadastrados </p>
+    {% endif %}
+    
+    
+    
+    {% include "pagamento/forma_pagamento_modal.html" with on_save="salvarPagamento()" on_cancel="fecharModal('#modal-pagamento')" %}
+
+    <script src="{% static 'js/pagamento/forma_pagamento.js' %}"></script>
+
+{% endblock content %}

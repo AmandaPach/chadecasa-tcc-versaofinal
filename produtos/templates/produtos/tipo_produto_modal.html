@@ -1,0 +1,83 @@
+<div class="modal fade" id="modal-tipo-produto" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar novo Tipo de produto</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-12 border rounded text-center py-2 edit-field">
+              <input type="checkbox" name="status" class="form-check-input" id="status" checked="true"/>
+              <label class="form-check-label" for="status">Ativo</label>
+            </div>
+            <div class="field col-12">
+              <label for="nome_tipo">Nome do Tipo</label>
+              <input
+                id="nome_tipo"
+                type="text"
+                name="nome_tipo"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-12">
+              <label for="descricao_tipo">Descrição</label>
+              <input
+                id="descricao_tipo"
+                type="text"
+                name="descricao_tipo"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6 mt-4 pt-1">
+              <input
+                id="vendavel"
+                type="checkbox"
+                class="form-check-input"
+                name="vendavel"
+                checked
+              />
+              <label for="vendavel">É vendável?</label>
+            </div>
+            <div class="field col-6 mt-4 pt-1">
+              <input
+                id="compravel"
+                type="checkbox"
+                class="form-check-input"
+                name="compravel"
+                checked
+              />
+              <label for="compravel">É comprável?</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div></div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" onclick="{{ on_cancel }}">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

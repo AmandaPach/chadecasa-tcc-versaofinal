@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal-cargo" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar novo cargo</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-6">
+              <label for="nome_cargo">Nome</label>
+              <input
+                id="nome_cargo"
+                type="text"
+                name="nome_cargo"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="salario_base_cargo">Salário Base</label>
+              <input
+                id="salario_base_cargo"
+                type="number"
+                data-type="money"
+                min="0"
+                step=".01"
+                name="salario_base_cargo"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-12">
+              <label for="descricao_cargo">Descrição</label>
+              <input
+                id="descricao_cargo"
+                type="text"
+                name="descricao_cargo"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div></div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" onclick="{{ on_cancel }}">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

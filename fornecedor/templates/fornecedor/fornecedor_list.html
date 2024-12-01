@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %} Fornecedor {% endblock page_title %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Fornecedores</h1>
+  <button onclick="abrirModal('#modal-fornecedor')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+{% if fornecedores %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">#</th>
+      <th scope="col">Status</th>
+      <th scope="col">Razão Social</th>
+      <th scope="col">Nome Fantasia</th>
+      <th scope="col">CNPJ</th>
+      <th scope="col">Cidade</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Última alteração</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for fornecedor in fornecedores %}
+    <tr>
+      <td scope="row">{{fornecedor.id}}</td>
+      <td>{% status is_active=fornecedor.status %}</td>
+      <td>{{fornecedor.razao_social_fornecedor}}</td>
+      <td>{{fornecedor.nome_fantasia_fornecedor}}</td>
+      <td>{{fornecedor.cnpj_fornecedor}}</td>
+      <td>{{fornecedor.cidade}}</td>
+      <td>{{fornecedor.data_cadastro|format_date}}</td>
+      <td>{{fornecedor.data_ultima_alteracao|format_date}}</td>
+      <td>
+        <a href="javascript:editarFornecedor('{{fornecedor.id}}')" class="btn btn-sm btn-warning"
+          >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+        >
+        <a
+          href="javascript:deleteFornecedor('{{fornecedor.id}}')"
+          class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Sem dados cadastrados</p>
+{% endif %}
+
+
+
+{% include 'fornecedor/fornecedor_modal.html' with on_save="salvarFornecedor()" on_cancel="fecharModal('#modal-fornecedor')" %}
+{% include 'cidade/cidade_modal.html' with on_save="salvarCidade()" on_cancel="abrirModal('#modal-fornecedor')" %}
+
+<script src="{% static 'js/fornecedor/fornecedor.js' %}"></script>
+
+{% endblock content %}

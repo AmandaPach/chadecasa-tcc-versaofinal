@@ -1,0 +1,232 @@
+<div class="modal fade" id="modal-compras" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar nova compra</h3>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="valor_total" value="0" id="valor_total" />
+          <div class="fields row pb-3">
+            <div class="field col-4">
+              <label for="nota_fiscal">Nota Fiscal</label>
+              <input
+                type="number"
+                min="0"
+                name="nota_fiscal"
+                id="nota_fiscal"
+                class="form-control nota-fiscal"
+                required
+              />
+            </div>
+            <div class="field col-4">
+              <label for="modelo_id">Modelo</label>
+              <select name="modelo_id" id="modelo_id" class="form-select nota-fiscal" required>
+                <option value="" selected>Selecione um modelo de nota</option>
+                {% for modelo in modelos %}
+                  <option value="{{ modelo.id }}">{{ modelo.numero_modelo }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field col-4">
+              <label>Série da Compra</label>
+              <input
+                type="number"
+                min="0"
+                name="serie"
+                value="1"
+                id="serie"
+                class="form-control nota-fiscal"
+                required
+              />
+            </div>
+            <div class="field col-8">
+              <label>Fornecedor</label>
+              <select
+                name="fornecedor_id"
+                id="fornecedor_id"
+                required
+                class="form-select nota-fiscal"
+              >
+                <option value="new">Novo Fornecedor</option>
+                <option value="" selected>Selecione um fornecedor</option>
+                {% for fornecedor in fornecedores %}
+                  <option value="{{ fornecedor.id }}">
+                    {{ fornecedor.nome_fantasia_fornecedor }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field col-4 mb-3">
+              <button onclick="unlockNotaFiscal()" id="return-nota" type="button" class="btn btn-danger mt-4">Voltar</button>
+              <button
+                onclick="verifyNotaFiscal()"
+                id="verify-nota"
+                type="button"
+                class="btn btn-primary w-75 mt-4 nota-fiscal"
+              >
+                Verificar Nota Fiscal
+              </button>
+            </div>
+            <div class="field col-6 edit-field mb-3">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-6 edit-field mb-3">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <hr>
+            <div class="field col-6">
+              <label>Data de Emissão</label>
+              <input
+                type="date"
+                required
+                onchange="verifyDates()"
+                name="data_emissao"
+                id="data_emissao"
+                class="form-control itens-compra"
+              />
+            </div>
+            <div class="field col-6">
+              <label>Data de Chegada</label>
+              <input
+                type="date"
+                onblur="verifyDates()"
+                required
+                name="data_chegada"
+                id="data_chegada"
+                class="form-control itens-compra"
+              />
+            </div>
+            
+          </div>
+
+          <h4>Itens da Compra</h4>
+          <div id="formset-items-produtos">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Valor Unit.</th>
+                  <th>Desconto</th>
+                  <th>Total</th>
+                  <th>Remover</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div
+            class="mb-3 px-2 d-flex justify-content-between align-items-center"
+          >
+            <h5 class="m-0">Total dos produtos: R$<span id="total_produtos">0.00</span></h5>
+            <div class="buttons">
+              <button onclick="unlockItensCompra()" id="return-produtos" type="button" class="btn btn-danger">
+                Voltar
+              </button>
+              <button type="button" class="btn btn-primary itens-compra" id="save-products" onclick="mudarSecaoProdutos()">
+                Salvar Produtos
+              </button>
+            </div>
+          </div>
+
+          <h4 class="mt-4">Pagamento</h4>
+          <div class="row pb-3">
+            <div class="field col-4">
+              <label for="frete">Frete</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="frete" id="frete">
+            </div>
+            <div class="field col-4">
+              <label for="seguro">Seguro</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="seguro" id="seguro">
+            </div>
+            <div class="field col-4">
+              <label for="outras_despesas">Outras Despesas</label>
+              <input type="text" data-type="money" class="form-control itens-pagamento" name="outras_despesas" id="outras_despesas">
+            </div>
+            <div class="field col-12">
+              <label for="condicao_pagamento_id">Condição de Pagamento</label>
+              <select id="condicao_pagamento_id" name="condicao_pagamento_id" class="form-select itens-pagamento">
+                <option value="new">Nova Condição de Pagamento</option>
+                <option value="" selected>Selecione uma condição de pagamento</option>
+                {% for condicao in condicoes %}
+                  <option value="{{ condicao.id }}">{{ condicao.nome_condicao_pgto }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="parcelas">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Parcela</th>
+                  <th>Percentual</th>
+                  <th>Dias</th>
+                  <th>Taxa</th>
+                  <th>Multa</th>
+                  <th>Desconto</th>
+                  <th>Forma de pagamento</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <hr>
+          <div class="mb-3 px-2 d-flex align-items-center">
+            <h3 class="m-0">Total: R$ <span id="total">0.00</span></h3>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button onclick="fecharModalCompras()" type="button" class="btn btn-secondary">
+          Cancelar
+        </button>
+        <button onclick="salvarCompras()" type="button" class="btn btn-success">
+          Salvar
+        </button>
+        <button class="modal-compras-close d-none btn btn-primary" onclick="fecharModalCompras()">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="empty-form-produto">
+  <td>
+    <button type="button" class="btn btn-primary" class="add-item itens-compra" onclick="addProdutoInput()"><b>+</b></button>
+  <td>
+    <select
+      class="form-select itens-compra"
+      name="produto_id"
+      onchange="verifyProduto(this)"
+      required
+    >
+    </select>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="number" class="form-control itens-compra" value="1" name="quantidade"/>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="number" class="form-control itens-compra" step=".01" name="custo" data-type="money" value="0.00"/>
+  </td>
+  <td>
+    <input onchange="updateTotalValue()" min="0" type="number" class="form-control itens-compra" step=".01" name="desconto" data-type="money" value="0.00"/>
+  </td>
+  <td>
+    <input type="number" readonly class="form-control itens-compra" name="unidadeCusto" data-type="money" value="0.00"/>
+  </td>
+  <td align="center">
+    <button type="button" class="btn btn-danger itens-compra" onclick="removeItem(this);">
+      <b>X</b>
+    </button>
+  </td>
+</script>

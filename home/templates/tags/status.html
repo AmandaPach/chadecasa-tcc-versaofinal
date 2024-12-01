@@ -1,0 +1,30 @@
+<style>
+  .status-widget {
+    aspect-ratio: 1;
+    border-radius: 100vmax;
+    height: 1.75rem;
+    background-color: #198754;
+    border: 2px solid #082115;
+  }
+
+  .status-widget span {
+    display: none;
+    font-size: 1rem;
+    padding: 0 1rem;
+    color: white;
+    font-weight: bold;
+  }
+
+  .status-widget:hover span {
+    display: block;
+  }
+
+  .status-widget.not_active {
+    background-color: red;
+    border-color: #21080b;
+  }
+</style>
+
+<div class="status-widget {% if not active %} not_active{% endif %}">
+  <span>{% if active %}Ativo{% else %} Inativo {% endif %}</span>
+</div>

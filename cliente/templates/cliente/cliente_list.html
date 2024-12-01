@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %}Cliente{%endblock page_title %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Clientes</h1>
+  <button onclick="abrirModal('#modal-cliente')" class="btn btn-primary">Novo cadastro</button>
+</div>
+
+{% if clientes %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">#</th>
+      <th scope="col">Status</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Sobrenome</th>
+      <th scope="col">É estrangeiro?</th>
+      <th scope="col">CPF</th>
+      <th scope="col">RG</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Última alteração</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cliente in clientes %}
+    <tr>
+      <td>{{cliente.id}}</td>
+      <td align="center">{% status is_active=cliente.status %}
+      <td>{{cliente.nome_cliente}}</td>
+      <td>{{cliente.sobrenome_cliente}}</td>
+      <td>
+        {% if cliente.estrangeiro_cliente == "True" %}
+          Sim
+        {% else %}
+          Não
+        {% endif %}
+      </td>
+      <td>{{cliente.cpf_cliente|default:'-'}}</td>
+      <td>{{cliente.rg_cliente|default:'-'}}</td>
+      <td>{{cliente.data_cadastro|format_date}}</td>
+      <td>{{cliente.data_ultima_alteracao|format_date}}</td>
+      <td>
+        {% if cliente.apagado != 'True' %}
+          <a
+            href="javascript:editarCliente('{{cliente.id}}')"
+            class="btn btn-sm btn-warning"
+          >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a>
+        {% endif %}
+        <a
+          href="javascript:deleteCliente({{cliente.id}})"
+          class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Sem dados cadastrados</p>
+{% endif %}
+
+
+{% include 'cliente/cliente_modal.html' with on_save="salvarCliente()" on_cancel="fecharModal('#modal-cliente')" %}
+{% include 'cidade/cidade_modal.html' with on_save="salvarCidade()" on_cancel="abrirModal('#modal-cliente')" %}
+
+<script src="{% static 'js/cliente/cliente.js' %}"></script>
+
+{% endblock content %}

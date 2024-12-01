@@ -1,0 +1,150 @@
+{% load static %}
+
+<div class="modal fade" id="modal-produto" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar novo produto</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-12">
+              <label for="nome_produto">Nome do Produto</label>
+              <input
+                id="nome_produto"
+                type="text"
+                name="nome_produto"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-6">
+              <label for="tipo_id">Tipo</label>
+              <select class="form-select" id="tipo_id" name="tipo_id" required>
+                <option value="new">Novo tipo</option>
+                <option value="" selected>Selecione um tipo</option>
+                {% for tipo in tipos %}
+                  <option value="{{ tipo.id }}">{{ tipo.nome_tipo }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field col-6">
+              <label for="quantidade">Quantidade</label>
+              <input
+                id="quantidade"
+                type="number"
+                name="quantidade"
+                class="form-control"
+                readonly
+                min="0"
+                value="0"
+                required
+              />
+            </div>
+            <div class="field col-12">
+              <label for="descricao_produto">Descrição</label>
+              <input
+                id="descricao_produto"
+                type="text"
+                name="descricao_produto"
+                class="form-control"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="unid_medida_produto">Unidade de medida</label>
+              <select
+                class="form-select"
+                id="unid_medida_produto"
+                name="unid_medida_produto"
+                required
+              >
+                <option value="" selected>
+                  Selecione uma unidade de medida
+                </option>
+                <option value="UN">Unidade</option>
+                <option value="KG">Quilograma</option>
+                <option value="LT">Litro</option>
+              </select>
+            </div>
+            <div class="field col-6">
+              <label for="categoria_id">Categoria</label>
+              <select
+                class="form-select"
+                id="categoria_id"
+                name="categoria_id"
+                required
+              >
+                <option value="new">Nova categoria</option>
+                <option value="" selected>Selecione uma categoria</option>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">
+                  {{ categoria.nome_categoria }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field col-6">
+              <label for="preco_custo_produto">Preço de custo</label>
+              <input
+                id="preco_custo_produto"
+                type="number"
+                step=".01"
+                min="0"
+                name="preco_custo_produto"
+                class="form-control price_field"
+                required
+                data-type="money"
+                value="0.00"
+              />
+            </div>
+            <div class="field col-6">
+              <label for="preco_venda_produto">Preço de venda</label>
+              <input
+                id="preco_venda_produto"
+                type="number"
+                step=".01"
+                min="0"
+                name="preco_venda_produto"
+                class="form-control price_field"
+                required
+                data-type="money"
+                value="0.00"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="{{ on_cancel }}"
+        >
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'produtos/categoria_modal.html' with on_save="salvarCategoria()" on_cancel="abrirModal('#modal-produto')" %}
+{% include 'produtos/tipo_produto_modal.html' with on_save="salvarTipoProduto()" on_cancel="abrirModal('#modal-produto')" %}
+<script src="{% static 'js/produtos/produto_modal.js' %}"></script>

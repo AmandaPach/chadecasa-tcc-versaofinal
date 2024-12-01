@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static format_date status %}
+
+{% block page_title %}
+    Modelo de nota fiscal
+{% endblock page_title %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+  <h1>Modelos de nota fiscal</h1>
+  <button onclick="abrirModal('#modal-modelo')" class="btn btn-primary">Novo cadastro</button> 
+</div>
+
+{% if modelos %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">Status</th>
+      <th scope="col">Número</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Data de registro</th>
+      <th scope="col">Última atualização</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for modelo in modelos %}
+      <tr>
+        <td>{% status is_active=modelo.status %}</td>
+        <td>{{modelo.numero_modelo}}</td>
+        <td>{{modelo.descricao_modelo|default:'-'}}</td>
+        <td>{{modelo.data_cadastro|format_date}}</td>
+        <td>{{modelo.data_ultima_alteracao|format_date}}</td>
+        <td>
+          <a href="javascript:editarModelo('{{modelo.id}}')" class="btn btn-sm btn-warning">
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a>
+          <a href="javascript:deleteModelo('{{modelo.id}}')" class="btn btn-sm btn-danger">
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p> Sem dados cadastrados </p>
+{% endif %}
+
+
+
+{% include "pagamento/modelo_modal.html" with on_save="salvarModelo()" on_cancel="fecharModal('#modal-modelo')" %}
+
+<script src="{% static 'js/pagamento/modelo.js' %}"></script>
+
+{% endblock content %}

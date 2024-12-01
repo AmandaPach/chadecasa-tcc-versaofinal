@@ -1,0 +1,86 @@
+{% load static %}
+
+<div class="modal fade" id="modal-cidade" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar nova Cidade</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-4">
+              <label for="nome_cidade">Nome</label>
+              <input
+                id="nome_cidade"
+                type="text"
+                name="nome_cidade"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-4">
+              <label for="ddd_cidade">DDD da cidade</label>
+              <input
+                id="ddd_cidade"
+                type="number"
+                maxlength="2"
+                minlength="1"
+                min="1"
+                name="ddd_cidade"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="field col-4">
+              <label for="estado_id">Estado</label>
+              <select id="estado_id" name="estado_id" class="form-control" required>
+                <option value="new">Novo estado</option>
+                <option value="" selected>Selecione o estado</option>
+                {% for estado in estados %}
+                <option value="{{ estado.id }}">
+                  {{ estado.nome_estado }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          onclick="{{on_cancel}}"
+          class="btn btn-secondary"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          onclick="{{on_save}}"
+          class="btn btn-success"
+        >
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'estado/estado_modal.html' with on_save="salvarEstado()" on_cancel="abrirModal('#modal-cidade')" %}
+{% include 'pais/pais_modal.html' with on_save="salvarPais()" on_cancel="abrirModal('#modal-estado')" %}
+
+<script src="{% static 'js/local/generic.js' %}"></script>

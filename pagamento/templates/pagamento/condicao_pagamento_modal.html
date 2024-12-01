@@ -1,0 +1,173 @@
+{% load static %}
+
+<div class="modal fade" id="modal-condicao" tabindex="2" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cadastrar nova condição de pagamento</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Preencha todos os campos obrigatórios!</p>
+        <form method="POST">
+          {% csrf_token %}
+          
+          <div class="fields row pb-3">
+            <div class="field col-4 edit-field">
+              <label for="id">ID</label>
+              <input type="text" class="form-control" name="id" readonly id="id">
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_cadastro">Criado em</label>
+              <input type="text" class="form-control" readonly id="data_cadastro" name="data_cadastro" disabled>
+            </div>
+            <div class="field col-4 edit-field">
+              <label for="data_ultima_alteracao">Atualizado em</label>
+              <input type="text" class="form-control" readonly id="data_ultima_alteracao" name="data_ultima_alteracao" disabled>
+            </div>
+            <div class="field col-12 border rounded text-center py-2 edit-field">
+              <input
+                type="checkbox"
+                name="status"
+                class="form-check-input"
+                id="status"
+                checked="true"
+              />
+              <label class="form-check-label" for="status">Ativo</label>
+            </div>
+            <div class="field col-12">
+              <label for="nome_condicao_pgto">Nome</label>
+              <input
+                id="nome_condicao_pgto"
+                type="text"
+                required
+                name="nome_condicao_pgto"
+                class="form-control required"
+              />
+            </div>
+          </div>
+
+          <h4>Parcelas</h4>
+          <div id="formset-items-parcelas">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Parcela*</th>
+                  <th>Percentual*</th>
+                  <th>Dias*</th>
+                  <th>Taxa</th>
+                  <th>Multa</th>
+                  <th>Desconto</th>
+                  <th>Forma de Pagamento*</th>
+                  <th align="center">Remover</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div id="percentual__alert" class="text-danger text-bold mb-3">
+            A soma dos valores percentuais deve ser 100%
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="add-item"
+            onclick="addParcelaInput()"
+          >
+            Adicionar Parcela
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div></div>
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" onclick="{{ on_cancel }}">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-success" onclick="{{ on_save }}">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="empty-form-parcela">
+  <tr>
+    <td>
+      <input
+        type="number"
+        name="parcela"
+        min="1"
+        class="form-control"
+        required
+      />
+    </td>
+    <td>
+      <input
+        type="number"
+        name="percentual"
+        min="1"
+        data-type="percent"
+        step=".1"
+        class="form-control"
+        value="0"
+        required
+      />
+    </td>
+    <td>
+      <input
+        type="number"
+        name="dias"
+        value="0"
+        min="0"
+        class="form-control"
+        required
+      />
+    </td>
+    <td>
+      <input
+        type="number"
+        name="taxa"
+        min="0"
+        value="0"
+        data-type="percent"
+        class="form-control"
+        required
+      />
+    </td>
+    <td>
+      <input
+        type="number"
+        name="multa"
+        min="0"
+        data-type="percent"
+        value="0"
+        class="form-control"
+        required
+      />
+    </td>
+    <td>
+      <input
+        type="number"
+        name="desconto"
+        min="0"
+        data-type="percent"
+        value="0"
+        class="form-control"
+        required
+      />
+    </td>
+    <td>
+      <select name="forma_pagamento" id="forma_pagamento" class="form-control" required value="">
+      </select>
+    </td>
+    <td align="center">
+      <button type="button" class="btn btn-danger" onclick="removerLinha(this)">
+        X
+      </button>
+    </td>
+  </tr>
+</script>
+
+<script src="{% static 'js/pagamento/condicao_pagamento_common.js' %}"></script>

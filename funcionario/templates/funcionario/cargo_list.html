@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static format_date %}
+
+{% block page_title %} Cargo {% endblock page_title %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+  <h1>Lista de Cargos</h1>
+  <button onclick="abrirModal('#modal-cargo')" class="btn btn-primary">
+    Novo cadastro
+  </button>
+</div>
+
+{% if cargos %}
+<table class="table table-hover">
+  <thead>
+    <tr class="table-light">
+      <th scope="col">#</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Descrição</th>
+      <th scope="col">Salário</th>
+      <th scope="col">Data de Cadastro</th>
+      <th scope="col">Última alteração</th>
+      <th scope="col">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cargo in cargos %}
+    <tr>
+      <th scope="row">{{cargo.id}}</th>
+      <td>{{cargo.nome_cargo}}</td>
+      <td>{{cargo.descricao_cargo|slice:":60"}}</td>
+      <td>{{cargo.salario_base_cargo}}</td>
+      <td>{{cargo.data_cadastro|format_date}}</td>
+      <td>{{cargo.data_ultima_alteracao|format_date}}</td>
+      <td>
+        <a href="javascript:editarCargo('{{cargo.id}}')" class="btn btn-sm btn-warning"
+          >
+            <img class='icon' src="{% static 'img/icons/edit.svg' %}" alt="Editar" />
+          </a
+        >
+        <a
+          href="javascript:deleteCargo('{{cargo.id}}')"
+          class="btn btn-sm btn-danger"
+          >
+            <img class='icon' src="{% static 'img/icons/trash.svg' %}" alt="Excluir" />
+          </a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Sem dados cadastrados</p>
+{% endif %}
+
+
+
+{% include 'funcionario/cargo_modal.html' with on_save="salvarCargo()" on_cancel="fecharModal('#modal-cargo')" %}
+
+<script src="{% static 'js/funcionario/cargo.js' %}"></script>
+
+{% endblock content %}
